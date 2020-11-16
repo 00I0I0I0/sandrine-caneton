@@ -1,10 +1,13 @@
 const googleTTS = require('google-tts-api');
 const axios = require('axios');
-const logger = require('@greencoast/logger');
+const { Logger } = require('logger');
 const dispatcherEvents = require('../events/dispatcherEvents');
 const languages = require('../../data/languages.json');
 const { TTS_ENGINES, AEIOU_API_URL } = require('../common/constants');
 const prefix = process.env.PREFIX || require('../../config/settings.json').prefix;
+const config = require("../../config/settings.json");
+
+const logger = new Logger();
 
 class TTSPlayer {
   constructor(guild) {
@@ -12,7 +15,7 @@ class TTSPlayer {
 
     this.queue = [];
     this.speaking = false;
-    this.lang = 'en';
+    this.lang = (guild.config.default_lang && languages[guild.config.default_lang]) ? guild.config.default_lang : "en";
     this.speed = 1;
   }
 
@@ -153,7 +156,7 @@ class TTSPlayer {
   setLang(newLang) {
     return new Promise((resolve, reject) => {
       if (!languages[newLang]) {
-        reject(`invalid language. Type **${prefix}langs** for a list of available languages.`);
+        reject(`invalid language. Type **${this.guild.config.prefix}langs** for a list of available languages.`);
         return;
       }
 

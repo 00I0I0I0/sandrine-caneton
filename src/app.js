@@ -16,7 +16,6 @@ for (const file of commandFiles) {
   const command = require(path.join(__dirname, './commands', file));
   client.commands.set(command.name, command);
 }
-
 client.on(appEvents.error, (error) => appHandlers.handleError(error));
 client.on(appEvents.guildCreate, (guild) => appHandlers.handleGuildCreate(guild, client));
 client.on(appEvents.guildDelete, (guild) => appHandlers.handleGuildDelete(guild, client));

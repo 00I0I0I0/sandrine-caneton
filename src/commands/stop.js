@@ -1,5 +1,6 @@
 module.exports = {
   name: 'stop',
+  group: "admin",
   description: 'Stop the TTS bot and leave the channel.',
   emoji: ':x:',
   execute(message, options) {

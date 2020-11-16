@@ -1,7 +1,10 @@
-const logger = require('@greencoast/logger');
+const { Logger } = require('logger');
 const TTSPlayer = require('../../classes/TTSPlayer');
 const prefix = process.env.PREFIX || require('../../../config/settings.json').prefix;
 const { updatePresence, executeCommand } = require('../../common/utils');
+const config = require('../../../config/settings.json');
+
+const logger = new Logger();
 
 const handleDebug = (info) => {
   logger.debug(info);
@@ -15,6 +18,14 @@ const handleGuildCreate = (guild, client) => {
   logger.info(`Joined ${guild.name} guild!`);
   updatePresence(client);
   guild.ttsPlayer = new TTSPlayer(guild);
+  if (config[guild.id])
+  {
+    guild.config = config[guild.id];
+  }
+  else
+  {
+    guild.config = config;
+  }
 };
 
 const handleGuildDelete = (guild, client) => {
@@ -33,11 +44,22 @@ const handleInvalidated = () => {
 };
 
 const handleMessage = (message, client) => {
-  if (!message.content.startsWith(prefix) || message.author.bot || !message.guild) {
+  if (!message.guild.config)
+  {
+    if (config[message.guild.id])
+    {
+      message.guild.config = config[message.guild.id];
+    }
+    else
+    {
+      message.guild.config = config;
+    }
+  }
+  if (!message.content.startsWith(message.guild.config.prefix) || message.author.bot || !message.guild) {
     return;
   }
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const args = message.content.slice(message.guild.config.prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
   const options = {
@@ -53,6 +75,14 @@ const handleReady = (client) => {
   updatePresence(client);
 
   client.guilds.cache.each((guild) => {
+    if (!guild.config && config[guild.id])
+    {
+      guild.config = config[guild.id];
+    }
+    else
+    {
+      guild.config = config;
+    }
     guild.ttsPlayer = new TTSPlayer(guild);
   });
 };

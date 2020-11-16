@@ -4,6 +4,7 @@ const prefix = process.env.PREFIX || require('../../config/settings.json').prefi
 
 module.exports = {
   name: 'help',
+  group: "admin",
   description: 'Display a help message with all the available commands.',
   emoji: ':question:',
   execute(message, options) {
@@ -12,7 +13,7 @@ module.exports = {
 
     const helpMessage = orderedCommands.reduce((commandsList, commandName) => {
       const command = commands.get(commandName);
-      commandsList += `${command.emoji} **${prefix}${command.name}** - ${command.description}\n`;
+      commandsList += `${command.emoji} **${message.guild.config.prefix}${command.name}** - ${command.description}\n`;
       return commandsList;
     }, '');
 

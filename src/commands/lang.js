@@ -3,6 +3,7 @@ const languages = require('../../data/languages.json');
 
 module.exports = {
   name: 'lang',
+  group: "admin",
   description: 'Change the TTS language.',
   emoji: ':map:',
   execute(message, options) {
@@ -10,8 +11,8 @@ module.exports = {
     const { ttsPlayer } = message.guild;
 
     if (!newLang) {
-      message.reply(`to set-up the TTS language, run: **${prefix}lang <lang_code>**
-      To see a list of the available lang codes, run: **${prefix}langs**.
+      message.reply(`to set-up the TTS language, run: **${message.guild.config.prefix}lang <lang_code>**
+      To see a list of the available lang codes, run: **${message.guild.config.prefix}langs**.
       The current language is set to: **${languages[ttsPlayer.lang]}**.`);
       return;
     }

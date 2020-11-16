@@ -1,6 +1,9 @@
-const logger = require('@greencoast/logger');
+const { Logger } = require('logger');
 const { ACTIVITY_TYPE, TTS_MAX_CHARS } = require('./constants');
 const allowOver200 = process.env.ALLOW_OVER_200 || require('../../config/settings.json').allow_more_than_200_chars;
+const config = require('../../config/settings.json');
+
+const logger = new Logger();
 
 /**
  * Updates the presence of the Discord bot.
@@ -34,11 +37,17 @@ const executeCommand = (client, message, options, commandName) => {
   const origin = message.guild ? message.guild.name : `DM with ${author}`;
 
   const command = client.commands.get(commandName);
-
+  var guild = message.guild;
   if (!command) {
     return;
   }
-
+  if ((guild.config.admin && command.group === "admin" && !message.guild.member(message.author).roles.cache.array().some(r=> guild.config.admin.includes(r.id)))
+      || (guild.config.user && command.group === "user" && !message.guild.member(message.author).roles.cache.array().some(r=> guild.config.user.includes(r.id)) && !message.guild.member(message.author).roles.cache.array().some(r=> guild.config.admin.includes(r.id)))){
+    console.log(guild.config);
+    console.log(message.guild.member(message.author).roles.cache.array()[0].id)
+    message.reply("permission denied");
+    return;
+  }
   try {
     logger.info(`User ${author} issued command ${commandName} in ${origin}.`);
     command.execute(message, options);

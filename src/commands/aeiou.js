@@ -1,7 +1,10 @@
-const logger = require('@greencoast/logger');
+const { Logger } = require('logger');
+
+const logger = new Logger();
 
 module.exports = {
   name: 'aeiou',
+  group: "user",
   description: 'Send an aeiou (similar to Moonbase Alpha) TTS message in your voice channel.',
   emoji: ':robot:',
   execute(message, options) {

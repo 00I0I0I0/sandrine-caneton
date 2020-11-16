@@ -2,6 +2,7 @@ const prefix = process.env.PREFIX || require('../../config/settings.json').prefi
 
 module.exports = {
   name: 'speed',
+  group: "admin",
   description: 'Change the TTS spoken speed (must be between 1% and 100%).',
   emoji: ':fast_forward:',
   execute(message, options) {
@@ -9,7 +10,7 @@ module.exports = {
     const { ttsPlayer } = message.guild;
 
     if (!newSpeed) {
-      message.reply(`to set-up the TTS speed, type: **${prefix}speed <speed>** and replace *<speed>* with a number between 1 and 100.`);
+      message.reply(`to set-up the TTS speed, type: **${message.guild.config.prefix}speed <speed>** and replace *<speed>* with a number between 1 and 100.`);
       return;
     }
 
