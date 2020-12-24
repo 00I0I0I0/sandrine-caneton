@@ -23,7 +23,7 @@
     "discord.js": "^12.2.0",
     "ffmpeg": "0.0.4",
     "fs-extra": "^8.1.0",
-    "google-tts-api": "0.0.4",
+    "google-tts-api": "0.0.6",
     "logger": "github:moonstar-x/logger",
     "prism-media": "^1.2.2"
   },
